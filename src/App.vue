@@ -1,8 +1,3 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
@@ -17,31 +12,32 @@ import TheWelcome from './components/TheWelcome.vue'
   </main>
 </template>
 
+<script>
+import Home from "@/components/Home.vue"
+import Login from "@/components/Login.vue"
+
+import user from "./scripts/user.js"
+import {onMounted, ref} from "vue";
+
+export default {
+  components: {
+    Home,
+    Login
+  },
+  setup() {
+    const isAuthenticated = ref(null)
+
+    onMounted(async () => {
+      isAuthenticated.value = await user.isAuthenticated(import.meta.env.API_URL)
+    })
+
+    return {
+      isAuthenticated
+    }
+  }
+}
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
