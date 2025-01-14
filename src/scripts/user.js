@@ -9,14 +9,21 @@ function getAuthFromLocalStorage() {
 }
 
 export default {
+    getSavedUsername(){
+        return localStorage.getItem('username')
+    },
     async isAuthenticated(apiUrl){
         const {username, token} = getAuthFromLocalStorage()
-        if(username === undefined || token === undefined) return false
+        if(username === undefined || username === null || token === undefined || token === null) return false
         const response = await webhandling.POST(apiUrl + "validToken", {
             username: username,
             token: token
         })
         const parsed = webhandling.handleResponse(response)
+        if(!parsed.success){
+            localStorage.removeItem('username')
+            localStorage.removeItem('token')
+        }
         return parsed.success
     },
     async needsSignupToken(apiUrl){
@@ -25,10 +32,17 @@ export default {
         if(!parsed.success) return true
         return parsed.data.required
     },
-    async createUser(apiUrl, username, password){
+    async getServers(apiUrl){
+        const response = await webhandling.GET(apiUrl + "getServers")
+        const parsed = webhandling.handleResponse(response)
+        if(!parsed.success) return []
+        return parsed.data.servers
+    },
+    async createUser(apiUrl, username, password, signupToken){
         const response = await webhandling.POST(apiUrl + "createUser", {
             username: username.toLowerCase(),
-            password: password
+            password: password,
+            signupToken: signupToken
         })
         const parsed = webhandling.handleResponse(response)
         if(!parsed.success) return false
@@ -51,39 +65,44 @@ export default {
     },
     async logout(apiUrl){
         const {username, token} = getAuthFromLocalStorage()
-        if(username === undefined || token === undefined) return false
+        if(username === undefined || username === null || token === undefined || token === null) return false
         const response = await webhandling.POST(apiUrl + "logout", {
             username: username.toLowerCase(),
             token: token
         })
-        return response.success
+        const parsed = webhandling.handleResponse(response)
+        return parsed.success
     },
     async revokeTokens(apiUrl){
         const {username, token} = getAuthFromLocalStorage()
-        if(username === undefined || token === undefined) return false
+        if(username === undefined || username === null || token === undefined || token === null) return false
         const response = await webhandling.POST(apiUrl + "revokeTokens", {
             username: username.toLowerCase(),
             token: token
         })
-        return response.success
+        const parsed = webhandling.handleResponse(response)
+        return parsed.success
     },
     async getStreamKey(apiUrl){
         const {username, token} = getAuthFromLocalStorage()
-        if(username === undefined || token === undefined) return false
+        if(username === undefined || username === null || token === undefined || token === null) return false
         const response = await webhandling.POST(apiUrl + "getStreamKey", {
             username: username.toLowerCase(),
             token: token
         })
-        if(!response.success) return undefined
-        return response.data.streamKey
+        const parsed = webhandling.handleResponse(response)
+        if(!parsed.success) return undefined
+        return parsed.data.streamKey
     },
     async resetStreamKey(apiUrl){
         const {username, token} = getAuthFromLocalStorage()
-        if(username === undefined || token === undefined) return false
+        if(username === undefined || username === null || token === undefined || token === null) return false
         const response = await webhandling.POST(apiUrl + "resetStreamKey", {
             username: username.toLowerCase(),
             token: token
         })
-        return response.success
+        const parsed = webhandling.handleResponse(response)
+        if(!parsed.success) return undefined
+        return parsed.data.streamKey
     }
 }

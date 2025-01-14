@@ -31,6 +31,6 @@ export default {
         })
     },
     handleResponse(res) {
-        return JSON.stringify(res)
+        return JSON.parse(res)
     }
 }
