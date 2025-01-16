@@ -56,6 +56,10 @@ function resetStreamKey(){
     streamKey.value = r
   })
 }
+
+function getStreamURL(){
+  return "https://" + location.value + "/live/" + username.value + "/publish?key=" + streamKey.value + "&video-codec=h264%2F90000&video-bitrate=5000"
+}
 </script>
 
 <template>
@@ -69,6 +73,8 @@ function resetStreamKey(){
     <div v-if="location !== undefined">
       <h2>Start your stream!</h2>
       <label>Set the server to the following text: rtmp://{{location}}/live</label>
+      <h3>Stream directly from your Browser</h3>
+      <a v-bind:href="getStreamURL()">Click here to start a stream!</a>
       <br/>
       <label>Set the Stream key to the following text: {{username}}?key={{streamKey}}</label>
       <h2>Play your stream back!</h2>
