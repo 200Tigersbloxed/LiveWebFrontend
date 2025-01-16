@@ -73,10 +73,10 @@ function getStreamURL(){
     <div v-if="location !== undefined">
       <h2>Start your stream!</h2>
       <label>Set the server to the following text: rtmp://{{location}}/live</label>
-      <h3>Stream directly from your Browser</h3>
-      <a v-bind:href="getStreamURL()">Click here to start a stream!</a>
       <br/>
       <label>Set the Stream key to the following text: {{username}}?key={{streamKey}}</label>
+      <h3>Stream directly from your Browser</h3>
+      <a v-bind:href="getStreamURL()">Click here to start a stream!</a>
       <h2>Play your stream back!</h2>
       <label>There's plenty of ways to watch the stream, here's some common ones</label>
       <br/>
