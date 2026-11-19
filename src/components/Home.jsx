@@ -242,7 +242,7 @@ function Home() {
                         <div className="col-12 col-md-6">
                             <CopyField
                                 label="HLS"
-                                value={`https://${location}/live/${username}/index.m3u8`}
+                                value={`https://${location}/live/${username}.m3u8`}
                             />
                         </div>
                     </div>
